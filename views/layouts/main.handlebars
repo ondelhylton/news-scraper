@@ -17,10 +17,19 @@ html {
 
 body {
   margin-bottom: 80px;
-  background-image: url("../images/paper.png");
+  background-image: url("../images/body_background.jpg");
 }
 
+h5 {
+color: white;
+}
+
+
 .card a:not([href]):not([tabindex]).scrape-new {
+  color: #2196F3;
+}
+
+.card-blank a:not([href]):not([tabindex]).scrape-new {
   color: #2196F3;
 }
 
@@ -35,6 +44,8 @@ body {
 
 .navbar {
   margin-bottom: 0;
+  color: white;
+  background-color: lightslategrey;
 }
 
 .jumbotron {
@@ -84,18 +95,37 @@ body {
   font-size: 30px;
 }
 
+
+
 .article-container {
-  padding-bottom: 25px;
+  padding-bottom: 15px;
 }
 
 .card {
   border-radius: 0;
   box-shadow: 3px 3px 20px lightslategrey;
-  margin: 20px 0;
+  width:375px; 
+  height:650px; 
+  float: left;
+  margin:10px;
+}
+
+.card-blank {
+  border-radius: 0;
+  box-shadow: 3px 3px 20px lightslategrey;
+  width:900px; 
+  height:150px; 
+  float: center;
+  background-color: white;
+}
+
+.card-blank .card-header {
+background-color: #aa0909;
+color: white;
 }
 
 .card .card-header {
-  background-color: #2196f3;
+  background-color: #525151;
   position: relative;
   padding-top: 30px;
   padding-bottom: 30px;
@@ -125,36 +155,34 @@ body {
   width: 80%;
 }
 
-.footer > .container > p {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  margin: 0;
-  font-weight: 800;
-  background: #0c7cd5;
-}
 
-.navbar-nav > li > a.scrape-new,
-.navbar-nav > li > a.clear {
-  padding: 10px;
+.navbar-nav > li  {
+  padding: 0px;
   margin-top: 10px;
   margin-left: 10px;
   font-weight: 800;
   color: white;
 }
 
-.navbar-nav > li > a.scrape-new:hover,
-.navbar-nav > li > a.clear:hover {
-  background: #4caf50;
+.active-right  {
+  padding-left: 500px;
+  color: white;
 }
 
-.navbar-nav > li > a.scrape-new:active {
-  background: #e51c23;
+
+
+.nav-itemleft {
+padding-left: 75px;
+padding-right: 10px;
 }
+
+.nav-itemright {
+padding-left: 600px;
+padding-right: 10px;
+}
+
+
+
 
 .scrape-new {
   cursor: pointer;

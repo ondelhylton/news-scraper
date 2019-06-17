@@ -1,87 +1,95 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="/">Mongo Scraper</a>
-  <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
-    aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+         <header>
+            <div class="topNavMenu">
+              <nav class="navbar navbar-expand-lg navbar overview-navbar">
+                <a class="navbar-brand" href="https://therealdeal.com/"
+                  ><img 
+                  class="overview-nav-logo"
+                  src="../images/smalllogo.png"
+                    alt="back to search"
+                    style="height:50px;"
+                /></a>
+         
+                <div class="collapse navbar-collapse" id="navbarText">
 
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/">Home
-          <span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/saved">Saved Articles
-          <span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="btn btn-danger clear">CLEAR ARTICLES!</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<div class="jumbotron text-center">
-  <div class="overlay">
-  </div>
-  <div class="background-image">
-  </div>
-  <div class="caption">
-    <h1>Saved Articles</h1>
-    <p>Your Saved Articles</p>
-  </div>
-</div>
-<div class="container-fluid article-container">
+                    <div class="nav-itemleft">
+                        <a class="btn btn-danger" href="/saved">Saved Articles</a>
+                      </div>
+
+                      <div class="nav-item">
+                        <a class="btn btn-danger clear">Clear</a>
+                      </div>
+        
+                  <div class="nav-itemright">
+                      <a class="btn btn-warning" href="/">Current Articles</a>
+                    </div>
+
+                </div>
+              </nav>
+            </div>
+          </header>
+
+          
+<div class="row">
+<div class="col-2"></div>
+<br>
+
+<div class="col-10">
+  <div class="container-fluid article-container">
   {{#each articles}}
     <div data-_id={{this._id}} class="card">
-      <div class="card-header">
-        <h3>
-          <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.headline}}</a>
-          <a class="btn btn-danger delete">Delete From Saved</a>
-          <a class="btn btn-info notes">Article Notes</a>
-        </h3>
-      </div>
-      <div class="card-body">{{this.summary}}</div>
+    <div class="card-header">
+      <h3>
+        <a class="article-link" target="_blank" rel="noopener noreferrer" href="{{this.url}}">{{this.headline}}</a>
+      </h3>
+      <h5>{{this.time}}</h5>
     </div>
+
+
+    <div class="card-body">
+    <img src="{{this.image}}" alt="{{this.headline}}" height="205px">
+    <br><br>
+      <div class = "summary">
+      {{this.summary}}
+      <br><br>
+      </div>
+    
+    <a class="btn btn-danger delete" style= "color:white">Delete Article</a>
+    <a class='btn btn-danger notes' style= "color:white">Article Notes</a>
+  </div>
+  </div>
   {{/each}}
+
+
   {{#unless articles.length}}
-    <div class="alert alert-warning text-center">
-      <h4>Uh Oh. Looks like we don't have any saved articles.</h4>
+    <br><br>
+  <div class="card-blank">
+    <div class="card-header text-center">
+      <h4>You Don't Have Any Saved Articles</h4>
     </div>
-    <div class="card">
-      <div class="card-header text-center">
-        <h3>Would You Like to Browse Available Articles?</h3>
-      </div>
       <div class="card-body text-center">
-        <h4>
-          <a href="/">Browse Articles</a>
-        </h4>
-      </div>
+      <h4>
+        <a href="/">Browse Recent Articles</a>
+      </h4>
     </div>
+  </div>
   {{/unless}}
 </div>
+</div> 
+</div>
 
-<footer class="footer">
-  <div class="container">
-    <p>New York Times Mongo Scraper</p>
-  </div>
-</footer>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-{{!-- <script src="/assets/javascript/saved.js"></script> --}}
+
 
 <script>
 
-  /* global bootbox */
+
 $(document).ready(function() {
-  // Getting a reference to the article container div we will be rendering all articles inside of
   var articleContainer = $(".article-container");
-  // Adding event listeners for dynamically generated buttons for deleting articles,
-  // pulling up article notes, saving article notes, and deleting article notes
+
   $(document).on("click", ".btn.delete", handleArticleDelete);
   $(document).on("click", ".btn.notes", handleArticleNotes);
   $(document).on("click", ".btn.save", handleNoteSave);
@@ -89,85 +97,84 @@ $(document).ready(function() {
   $(".clear").on("click", handleArticleClear);
 
   function initPage() {
-    // Empty the article container, run an AJAX request for any saved headlines
     $.get("/api/headlines?saved=true").then(function(data) {
       articleContainer.empty();
-      // If we have headlines, render them to the page
       if (data && data.length) {
         renderArticles(data);
       } else {
-        // Otherwise render a message explaining we have no articles
+
         renderEmpty();
       }
     });
   }
 
   function renderArticles(articles) {
-    // This function handles appending HTML containing our article data to the page
-    // We are passed an array of JSON containing all available articles in our database
     var articleCards = [];
-    // We pass each article JSON object to the createCard function which returns a bootstrap
-    // card with our article data inside
     for (var i = 0; i < articles.length; i++) {
       articleCards.push(createCard(articles[i]));
     }
-    // Once we have all of the HTML for the articles stored in our articleCards array,
-    // append them to the articleCards container
     articleContainer.append(articleCards);
   }
 
-  function createCard(article) {
-    // This function takes in a single JSON object for an article/headline
-    // It constructs a jQuery element containing all of the formatted HTML for the
-    // article card
+function createCard(article) {
     var card = $("<div class='card'>");
     var cardHeader = $("<div class='card-header'>").append(
       $("<h3>").append(
         $("<a class='article-link' target='_blank' rel='noopener noreferrer'>")
           .attr("href", article.url)
-          .text(article.headline),
-        $("<a class='btn btn-danger delete'>Delete From Saved</a>"),
-        $("<a class='btn btn-info notes'>Article Notes</a>")
+          .text(article.headline)
       )
-    );
+      );
+     var timeStamp = $("<h5>").text(article.time);
+      cardHeader.append(timeStamp);
+    
 
-    var cardBody = $("<div class='card-body'>").text(article.summary);
+    var image =  $("<img>")
+    image.attr('height', 205);
+    image.attr("src", article.image);
+    image.append("<br><br>");
+
+    var summary = $("<div class= 'summary'>").text(article.summary + "...");
+    summary.append("<br><br>");
+    summary.prepend("<br>");
+
+    var cardBody = $("<div class='card-body'>")
+    cardBody.append(image);
+    cardBody.append(summary);
+
+    var deleteButton = $("<a class='btn btn-danger delete' style='color:white' id='save'>Delete From Saved</a>")
+    deleteButton.append("<br>");
+    cardBody.append(deleteButton);
+
+    var notes = $("<a class='btn btn-danger notes'>Article Notes</a>");
+    cardBody.append(notes);
 
     card.append(cardHeader, cardBody);
-
-    // We attach the article's id to the jQuery element
-    // We will use this when trying to figure out which article the user wants to remove or open notes for
+  
     card.data("_id", article._id);
-    // We return the constructed card jQuery element
     return card;
   }
 
+
+
   function renderEmpty() {
-    // This function renders some HTML to the page explaining we don't have any articles to view
-    // Using a joined array of HTML string data because it's easier to read/change than a concatenated string
     var emptyAlert = $(
       [
-        "<div class='alert alert-warning text-center'>",
-        "<h4>Uh Oh. Looks like we don't have any saved articles.</h4>",
-        "</div>",
-        "<div class='card'>",
-        "<div class='card-header text-center'>",
-        "<h3>Would You Like to Browse Available Articles?</h3>",
-        "</div>",
-        "<div class='card-body text-center'>",
-        "<h4><a href='/'>Browse Articles</a></h4>",
-        "</div>",
+        "<br><br>"
+        "<div class='card-blank'>"
+        "<div class='card-header text-center'>"
+        "<h4>You Don't Have Any Saved Articles</h4>"
+        "</div>"
+        "<div class='card-body text-center'>"
+        "<h4><a href="/">Browse Recent Articles</a></h4>"
+        "</div>"
         "</div>"
       ].join("")
     );
-    // Appending this data to the page
     articleContainer.append(emptyAlert);
   }
 
-  function renderNotesList(data) {
-    // This function handles rendering note list items to our notes modal
-    // Setting up an array of notes to render after finished
-    // Also setting up a currentNote variable to temporarily store each note
+  function renderNotesList(data) {e
     var notesToRender = [];
     var currentNote;
     if (!data.notes.length) {
@@ -192,22 +199,18 @@ $(document).ready(function() {
   }
 
   function handleArticleDelete() {
-    // This function handles deleting articles/headlines
-    // We grab the id of the article to delete from the card element the delete button sits inside
     var articleToDelete = $(this)
       .parents(".card")
       .data();
 
-    // Remove card from page
     $(this)
       .parents(".card")
       .remove();
-    // Using a delete method here just to be semantic since we are deleting an article/headline
+ 
     $.ajax({
       method: "DELETE",
       url: "/api/headlines/" + articleToDelete._id
     }).then(function(data) {
-      // If this works out, run initPage again which will re-render our list of saved articles
       if (data.ok) {
         initPage();
       }

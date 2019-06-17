@@ -1,56 +1,54 @@
-// scrape script
-// =============
-
-// Require axios and cheerio, making our scrapes possible
 var axios = require("axios");
 var cheerio = require("cheerio");
-
-// This function will scrape the NYTimes website
 var scrape = function() {
-  // Scrape the NYTimes website
-  return axios.get("http://www.nytimes.com").then(function(res) {
+  return axios.get("https://therealdeal.com/").then(function(res) {
     var $ = cheerio.load(res.data);
     console.log("scraping");
-    // Make an empty array to save our article info
     var articles = [];
 
-    // Now, find and loop through each element that has the ".assetWrapper" class
-    // (i.e, the section holding the articles)
-    $(".assetWrapper").each(function(i, element) {
-      // In each article section, we grab the headline, URL, and summary
 
-      // Grab the headline of the article
+    $(".post-holder").each(function(i, element) {
       var head = $(this)
-        .find("h2")
-        .text()
-        .trim();
+      .find("h3.entry-title.entry-summary")
+      .children()
+      .attr("title")
+  
 
-      // Grab the URL of the article
       var url = $(this)
-        .find("a")
-        .attr("href");
+      .find("a")
+      .attr("href");
 
-      // Grab the summary of the article
+      var time = $(this)
+      .find("span.date.updated.published")
+      .text()
+      .trim();
+
+
       var sum = $(this)
-        .find("p")
-        .text()
-        .trim();
+      .find(".blogroll_excerpt")
+      .text()
+      .slice(12, -12);
 
-      // So long as our headline and sum and url aren't empty or undefined, do the following
-      if (head && sum && url) {
-        // This section uses regular expressions and the trim function to tidy our headlines and summaries
-        // We're removing extra lines, extra spacing, extra tabs, etc.. to increase to typographical cleanliness.
-        var headNeat = head.replace(/(\r\n|\n|\r|\t|\s+)/gm, " ").trim();
-        var sumNeat = sum.replace(/(\r\n|\n|\r|\t|\s+)/gm, " ").trim();
 
-        // Initialize an object we will push to the articles array
+      var image = $(this)
+      .find(".blogroll_image_small")
+      .find("a")
+      .find("img")
+      .attr("src");
+
+
+      
+
+      if (head && sum && time && image) {
+
         var dataToAdd = {
-          headline: headNeat,
-          summary: sumNeat,
-          url: "https://www.nytimes.com" + url
+          headline: head,
+          time: time,
+          summary: sum,
+          url: url,
+          image: image
         };
 
-        // Push new article into articles array
         articles.push(dataToAdd);
         console.log(articles);
       }
@@ -60,5 +58,8 @@ var scrape = function() {
   });
 };
 
-// Export the function, so other files in our backend can use it
 module.exports = scrape;
+
+
+
+
