@@ -36,6 +36,10 @@ $(document).ready(function() {
     articleContainer.append(articleCards);
   }
 
+
+
+
+  
   function createCard(article) {
     // This function takes in a single JSON object for an article/headline
     // It constructs a jQuery element containing all of the formatted HTML for the

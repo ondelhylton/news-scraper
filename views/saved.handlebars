@@ -142,7 +142,7 @@ function createCard(article) {
     cardBody.append(image);
     cardBody.append(summary);
 
-    var deleteButton = $("<a class='btn btn-danger delete' style='color:white' id='save'>Delete From Saved</a>")
+    var deleteButton = $("<a class='btn btn-danger delete' style='color:white'>Delete From Saved</a>")
     deleteButton.append("<br>");
     cardBody.append(deleteButton);
 
@@ -155,20 +155,18 @@ function createCard(article) {
     return card;
   }
 
-
-
   function renderEmpty() {
     var emptyAlert = $(
       [
-        "<br><br>"
-        "<div class='card-blank'>"
-        "<div class='card-header text-center'>"
-        "<h4>You Don't Have Any Saved Articles</h4>"
-        "</div>"
-        "<div class='card-body text-center'>"
-        "<h4><a href="/">Browse Recent Articles</a></h4>"
-        "</div>"
-        "</div>"
+        "<br><br>",
+        "<div class='card-blank'>",
+        "<div class='card-header text-center'>",
+        "<h4>You Don't Have Any Saved Articles</h4>",
+        "</div>",
+        "<div class='card-body text-center'>",
+        "<h4><a href='/'>Browse Recent Articles</a></h4>",
+        "</div>",
+        "</div>",
       ].join("")
     );
     articleContainer.append(emptyAlert);
